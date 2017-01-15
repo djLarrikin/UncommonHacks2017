@@ -7,7 +7,7 @@ android {
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.thanmorton.jona.uncommonhacks2017"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -32,6 +32,8 @@ dependencies {
     compile "com.android.support:percent:$android_support_version"
     compile "com.android.support:support-v4:$android_support_version"
 
+    compile 'com.estimote:sdk:0.11.1@aar'
+
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "org.jetbrains.anko:anko-common:$anko_version"
 
@@ -43,7 +45,6 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'javax.annotation:javax.annotation-api:1.2'
-    compile 'com.android.support:support-v4:25.1.0'
     testCompile 'junit:junit:4.12'
 }
 
