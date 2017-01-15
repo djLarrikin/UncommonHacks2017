@@ -43,15 +43,13 @@ class ClippyService : Service() {
         throw UnsupportedOperationException("Not yet implemented")
     }
 
-    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        startClippy()
-        return super.onStartCommand(intent, flags, startId)
-        /*if (startId == Service.START_STICKY) {
-
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        if (startId == Service.START_STICKY) {
+            startClippy()
             return super.onStartCommand(intent, flags, startId)
         } else {
             return Service.START_NOT_STICKY
-        }*/
+        }
     }
 
     fun startClippy() {
@@ -167,10 +165,26 @@ class ClippyService : Service() {
         noThanksTextView = dialogView!!.find(R.id.noThanksTextView)
         option1TextView = dialogView!!.find(R.id.option1TextView)
 
-        noThanksTextView!!.setOnClickListener {
-            dialogView!!.visibility = View.GONE
-            playHorns()
+        val currentApp = getTopAppName(this)
+        L.d(currentApp)
+
+        when (currentApp) {
+            "com.android.providers.media", "com.jrtstudio.AnotherMusicPlayer" -> {
+                option1TextView!!.text = getString(R.string.music_app_party)
+                option1TextView!!.setOnClickListener {
+                    dialogView!!.visibility = View.GONE
+                    playHorns()
+                }
+                noThanksTextView!!.setOnClickListener {
+                    dialogView!!.visibility = View.GONE
+
+                }
+            }
+            else -> {
+                dialogView!!.visibility = View.GONE
+            }
         }
+
 
 
     }
@@ -261,10 +275,14 @@ class ClippyService : Service() {
             playDelayed(soundPool, hornSound, 600)
             playDelayed(soundPool, hornSound, 800)
             playDelayed(soundPool, hornSound, 1000)
+            playDelayed(soundPool, hornSound, 1600)
+            playDelayed(soundPool, hornSound, 1900)
+            playDelayed(soundPool, hornSound, 2000)
+
             return null
         }
 
-        override fun onPostExecute(aVoid: Void) {
+        override fun onPostExecute(aVoid: Void?) {
             super.onPostExecute(aVoid)
             releaseDelayed(soundPool, 5000)
         }
