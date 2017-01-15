@@ -1,16 +1,18 @@
 package hackathon.morton.jonathan.uncommonhacks2017
 
+import android.animation.ObjectAnimator
 import android.app.ActivityManager
 import android.app.Service
 import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.res.Resources
 import android.graphics.PixelFormat
 import android.graphics.Point
 import android.media.AudioAttributes
-import android.media.AudioManager
 import android.media.SoundPool
+import android.net.Uri
 import android.os.*
 import android.util.Log
 import android.view.*
@@ -162,14 +164,16 @@ class ClippyService : Service() {
         windowManager!!.updateViewLayout(dialogView, dialogParams)
         dialogView!!.visibility = View.VISIBLE
 
-        noThanksTextView = dialogView!!.find(R.id.noThanksTextView)
+        questionTextView = dialogView!!.find(R.id.questionTextView)
         option1TextView = dialogView!!.find(R.id.option1TextView)
+        noThanksTextView = dialogView!!.find(R.id.noThanksTextView)
 
         val currentApp = getTopAppName(this)
         L.d(currentApp)
 
         when (currentApp) {
             "com.android.providers.media", "com.jrtstudio.AnotherMusicPlayer" -> {
+                questionTextView!!.text = getString(R.string.music_app_intro)
                 option1TextView!!.text = getString(R.string.music_app_party)
                 option1TextView!!.setOnClickListener {
                     dialogView!!.visibility = View.GONE
@@ -177,11 +181,32 @@ class ClippyService : Service() {
                 }
                 noThanksTextView!!.setOnClickListener {
                     dialogView!!.visibility = View.GONE
+                }
+            }
+            "com.sonyericsson.conversations" -> {
+                questionTextView!!.text = getString(R.string.messaging_app_intro)
+                option1TextView!!.text = getString(R.string.messaging_app_text_boo)
+                option1TextView!!.setOnClickListener {
+                    dialogView!!.visibility = View.GONE
 
+                    val smsIntent = Intent(Intent.ACTION_VIEW)
+                    smsIntent.setData(Uri.parse("sms:"))
+                    smsIntent.putExtra("address", "12125551212")
+                    smsIntent.putExtra("sms_body", "u up?")
+                    smsIntent.addFlags(FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(smsIntent)
+
+                }
+                noThanksTextView!!.setOnClickListener {
+                    dialogView!!.visibility = View.GONE
                 }
             }
             else -> {
                 dialogView!!.visibility = View.GONE
+                val objectAnimator: ObjectAnimator = ObjectAnimator.ofFloat(clippyImageView, "rotation", 0.0f, 360f)
+                objectAnimator.duration = 500
+                objectAnimator.start()
+
             }
         }
 
@@ -211,7 +236,7 @@ class ClippyService : Service() {
     private fun getLollipopFGAppPackageName(context: Context): String {
 
         val uselessPackages = arrayOf(
-                "swype",
+                "com.nuance.swype.dtc",
                 "com.android.providers.userdictionary",
                 "com.google.android.gsf",
                 "googlequicksearchbox",
@@ -257,7 +282,6 @@ class ClippyService : Service() {
         var soundPool: SoundPool? = null
 
         override fun doInBackground(vararg params: Void): Void? {
-            val audioManager = applicationContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
             val audioAttributes = AudioAttributes.Builder()
                     .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                     .setUsage(AudioAttributes.USAGE_MEDIA)
