@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Uncommon Hacks 2017</string>
+
+    <string name="help_question">\nWould you like some help?\n</string>
+    <string name="no_thanks">No thanks</string>
+    <string name="messaging_app_intro">It looks like you\'re writing a text.</string>
+    <string name="messaging_app_text_boo">Get help texting your boo</string>
+    <string name="messaging_app_text_mom">Text my mom</string>
+    <string name="messaging_app_no_help">Just type the text without help</string>
+
+    <string name="music_app_intro">It looks like you\'re listening to music.</string>
+    <string name="music_app_party">Get helping getting the party lit</string>
 </resources>
