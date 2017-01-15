@@ -23,6 +23,7 @@ import org.jetbrains.anko.find
 import java.util.*
 
 
+/* based on https://github.com/henrychuangtw/Android-ChatHead */
 class ClippyService : Service() {
 
     private var windowManager: WindowManager? = null
